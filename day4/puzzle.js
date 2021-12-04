@@ -1,4 +1,5 @@
 const getData = require('../helpers/getData');
+const nullBoard = require('./nullBoard');
 
 let input = './dummy.txt';
 input = './input.txt';
@@ -33,13 +34,7 @@ const task1 = async () => {
             if (hasWon) {
                 const sum = sumOfAllUnmarkedNumbers(markedBoard);
                 if (sum > 0) console.log(sum, drawNum, sum * drawNum);
-                return [
-                    [null, null, null, null, null],
-                    [null, null, null, null, null],
-                    [null, null, null, null, null],
-                    [null, null, null, null, null],
-                    [null, null, null, null, null],
-                ];
+                return nullBoard();
             }
             return markedBoard;
         });
