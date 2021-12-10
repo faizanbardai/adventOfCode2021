@@ -1,16 +1,17 @@
 const getData = require('../helpers/getData');
+const { transform } = require('./transform');
 
-let input = './dummy.txt';
-// input = './input.txt';
+let input = './test.txt';
+// input = './puzzle.txt';
 
-const task1 = async () => {
-    const data = await getData(input);
+const puzzleOne = async () => {
+    const data = await getData(input).then(transform);
     console.log(data);
 };
-task1();
+puzzleOne();
 
-const task2 = async () => {
-    const data = await getData(input);
+const puzzleTwo = async () => {
+    const data = await getData(input).then(transform);
     console.log(data);
 };
-task2();
+// puzzleTwo();
