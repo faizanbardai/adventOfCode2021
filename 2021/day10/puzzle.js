@@ -1,5 +1,5 @@
 const { sortBy } = require('lodash');
-const getData = require('../helpers/getData');
+const getData = require('../../helpers/getData');
 
 let input = './dummy.txt';
 input = './input.txt';
