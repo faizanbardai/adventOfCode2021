@@ -62,6 +62,25 @@ const littleDeduction = (input) => {
                 break;
         }
     });
+    /**
+     * Known
+     * 1 [2] cf
+     * 7 [3] acf
+     * 4 [4] bcdf
+     * 8 [7] abcdefg
+     *
+     * To find:
+     * 3 [5] acdfg      length is 5 and has 1 (both c and f)
+     * 5 [5] abdfg      length is 5 and has either c or f
+     * 2 [5] acdeg      length is 5 and is not 3 or 5 from above
+     *
+     * Length: 6
+     * 0 [6] abcefg     length is 6 and has 4 - 1 [bcdf - cf] (both b and d)
+     * 9 [6] abcdfg     length is 6 and is not 0 (from above) and includes 1 (both c and f)
+     * 6 [6] abdefg     length is 6 and is not 0 or 9 (from above)
+     *
+     */
+
     const three = signals.find((signal) => {
         const one = circuit.get(1);
         const check = signal.length === 5 && signal.includes(one[0]) && signal.includes(one[1]);
