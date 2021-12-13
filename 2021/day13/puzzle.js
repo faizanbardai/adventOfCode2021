@@ -19,58 +19,31 @@ let dotsMap = new Map();
 
 const getPuzzleData = async () => {
     const data = await getData(input).then(transform);
-    const [dots, fold] = data;
+    const [dots, folds] = data;
     dots.forEach((dot) => dotsMap.set(dot, 1));
-    // drawMap(dotsMap);
-    // console.log(dots);
-    // console.log(dotsMap);
-    // let newSheet;
-    fold.forEach((f) => {
-        dotsMap = foldPaper(dotsMap, f);
-    });
+    console.log({ part1: countDots(foldPaper(dotsMap, folds[0])) });
+    folds.forEach((fold) => (dotsMap = foldPaper(dotsMap, fold)));
     drawMap(dotsMap);
-    const count = countDots(dotsMap);
-    // console.log(count);
-
-    // const newSheet2 = foldPaper(newSheet, fold[1]);
-    // const count2 = countDots(newSheet2);
-    // drawMap(newSheet2);
-    // console.log(count2);
 };
 getPuzzleData();
 const foldPaper = (dotsMap, fold) => {
     const afterFold = new Map();
-
     const foldAxis = fold.split('=')[0].slice(-1);
     const foldValue = parseInt(fold.split('=')[1]);
     if (foldAxis === 'y') {
         afterFold.set(`${0},${foldValue - 1}`, 0);
         dotsMap.forEach((value, dot) => {
             const [x, y] = dot.split(',').map(Number);
-            if (y < foldValue) {
-                afterFold.set(dot, value);
-            }
-            if (y > foldValue) {
-                const counterPartDot = `${x},${foldValue * 2 - y}`;
-                const oldValue = dotsMap.get(counterPartDot);
-                const newValue = oldValue ? value + oldValue : value;
-                afterFold.set(counterPartDot, newValue);
-            }
+            if (y < foldValue) afterFold.set(dot, value);
+            if (y > foldValue) afterFold.set(`${x},${foldValue * 2 - y}`, 1);
         });
     }
     if (foldAxis === 'x') {
         afterFold.set(`${foldValue - 1},${0}`, 0);
         dotsMap.forEach((value, dot) => {
             const [x, y] = dot.split(',').map(Number);
-            if (x < foldValue) {
-                afterFold.set(dot, value);
-            }
-            if (x > foldValue) {
-                const counterPartDot = `${foldValue * 2 - x},${y}`;
-                const oldValue = dotsMap.get(counterPartDot);
-                const newValue = oldValue ? value + oldValue : value;
-                afterFold.set(counterPartDot, 1);
-            }
+            if (x < foldValue) afterFold.set(dot, value);
+            if (x > foldValue) afterFold.set(`${foldValue * 2 - x},${y}`, 1);
         });
     }
     return afterFold;
@@ -88,13 +61,12 @@ const drawMap = (dots) => {
         }
     }
     array.forEach((line) => console.log(line.join('  ')));
-    // console.log(array);
 };
 
 const getMax = (dots) => {
     let xMax;
     let yMax;
-    dots.forEach((value, dot) => {
+    Array.from(dots.keys()).forEach((dot) => {
         const [x, y] = dot.split(',').map(Number);
         xMax = xMax > x ? xMax : x;
         yMax = yMax > y ? yMax : y;
@@ -102,16 +74,4 @@ const getMax = (dots) => {
     return { xMax, yMax };
 };
 
-const countDots = (dots) => {
-    let counter = 0;
-    dots.forEach((value, dot) => {
-        if (value > 0) counter++;
-    });
-    return counter;
-};
-
-const puzzleTwo = async () => {
-    const data = await getData(input).then(transform);
-    console.log(data);
-};
-// puzzleTwo();
+const countDots = (dots) => Array.from(dots.values()).filter((num) => num === 1).length;
