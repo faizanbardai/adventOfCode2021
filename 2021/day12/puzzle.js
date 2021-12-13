@@ -32,21 +32,28 @@ const puzzleOne = async () => {
             else cavesMap.set(start, [end]);
         }
     });
+    const smallCaves = [];
     cavesMap.forEach((caves, start) => {
         caves.sort();
         caves.push(caves.splice(caves.indexOf(Dir.end), 1)[0]);
         cavesMap.set(start, caves);
+        if (start !== Dir.start && start.toLowerCase() === start) smallCaves.push(start);
     });
-    console.log(cavesMap);
-    findPaths();
+
+    // findPaths();
+    // console.log({ part1: pathCount.size });
+    // pathCount.clear();
+    smallCaves.forEach((smallCave) => {
+        findPaths(Dir.start, [Dir.start], smallCave);
+    });
     console.log(pathCount);
+    console.log({ part2: pathCount.size });
 };
 puzzleOne();
-let pathCount = 0;
+const pathCount = new Set();
 
-const findPaths = (start = Dir.start, paths = [Dir.start]) => {
+const findPaths = (start = Dir.start, paths = [Dir.start], smallCaveTwice = null) => {
     if (paths[paths.length - 1] === Dir.end) {
-        console.log(paths);
         return;
     }
 
@@ -56,18 +63,21 @@ const findPaths = (start = Dir.start, paths = [Dir.start]) => {
         const cave = caves[i];
 
         if (cave === Dir.end) {
-            pathCount++;
-            console.log([...paths, cave]);
+            pathCount.add([...paths, cave].join(','));
             break;
         }
 
         if (cave === Dir.start) continue;
 
         const isSmallCave = cave.toLowerCase() === cave;
+        const smallCaveCount = paths.filter((c) => c === cave).length;
+        if (isSmallCave && smallCaveCount === 1 && cave === smallCaveTwice) {
+            findPaths(cave, [...paths, cave], smallCaveTwice);
+        }
 
         if (isSmallCave && paths.includes(cave)) continue;
 
-        findPaths(cave, [...paths, cave]);
+        findPaths(cave, [...paths, cave], smallCaveTwice);
     }
 };
 
