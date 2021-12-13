@@ -82,12 +82,12 @@ const drawMap = (dots) => {
     for (let y = 0; y <= yMax; y++) {
         array[y] = [];
         for (let x = 0; x <= xMax; x++) {
-            array[y][x] = '.';
+            array[y][x] = ' ';
             const fill = dots.get(`${x},${y}`);
             if (fill) array[y][x] = '#';
         }
     }
-    array.forEach((line) => console.log(line.join('..')));
+    array.forEach((line) => console.log(line.join('  ')));
     // console.log(array);
 };
 
