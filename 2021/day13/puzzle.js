@@ -18,7 +18,7 @@ input = './puzzle.txt';
  * ...
  */
 
-const getPuzzleData = async () => {
+const transparentOrigami = async () => {
     const data = await getData(input).then(transform);
     const [dots, folds] = data;
     let dotsMap = new Map();
@@ -27,4 +27,4 @@ const getPuzzleData = async () => {
     folds.forEach((fold) => (dotsMap = foldPaper(dotsMap, fold)));
     drawMap(dotsMap);
 };
-getPuzzleData();
+transparentOrigami();
